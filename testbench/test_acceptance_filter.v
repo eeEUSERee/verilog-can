@@ -48,6 +48,27 @@ module test_acceptance_filter(output reg finished, output reg [15:0] errors);
 
 	`include "testbench/fixture.inc"
 
+	localparam baudrate_prescaler = 6'h0;
+	localparam sync_jump_width = 2'h1;
+	localparam tseg1 = 4'h1;
+	localparam tseg2 = 3'h0;
+	localparam bitclocks = clocks_per_bit(baudrate_prescaler, tseg2, tseg1);
+
+	localparam triple_sampling = 0;
+	localparam extended_mode = 1;
+	localparam remote_transmission_request = 0;
+
+	integer dut_sender = 1;
+	integer dut_receiver;
+	integer value = 0;
+	integer expected= 0;
+
+	reg [31:0] filter_id;
+	reg [31:0] bad_id;
+	reg [31:0] filter_mask;
+	reg [63:0] payload;
+	reg [3:0] dlc;
+
 	task automatic setup_devices(input reg [31:0] filter_id, input reg [31:0] filter_mask);
 		begin
 			// transmitting device
@@ -133,26 +154,6 @@ module test_acceptance_filter(output reg finished, output reg [15:0] errors);
 		end
 	endtask
 
-	localparam baudrate_prescaler = 6'h0;
-	localparam sync_jump_width = 2'h1;
-	localparam tseg1 = 4'h1;
-	localparam tseg2 = 3'h0;
-	localparam bitclocks = clocks_per_bit(baudrate_prescaler, tseg2, tseg1);
-
-	localparam triple_sampling = 0;
-	localparam extended_mode = 1;
-	localparam remote_transmission_request = 0;
-
-	integer dut_sender = 1;
-	integer dut_receiver;
-	integer value = 0;
-	integer expected= 0;
-
-	reg [31:0] filter_id;
-	reg [31:0] bad_id;
-	reg [31:0] filter_mask;
-	reg [63:0] payload;
-	reg [3:0] dlc;
 
 	initial begin
 		errors = 0;
