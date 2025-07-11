@@ -41,7 +41,11 @@
 
 `default_nettype none
 
-module can_register_asyn_syn(
+module can_register_asyn_syn #(
+	parameter WIDTH = 8,
+	parameter RESET_VALUE = 0
+	)
+	(
 	input wire [WIDTH-1:0] data_in,
 	output reg [WIDTH-1:0] data_out,
 	input wire we,
@@ -49,8 +53,7 @@ module can_register_asyn_syn(
 	input wire rst,
 	input wire rst_sync);
 
-	parameter WIDTH = 8;
-	parameter RESET_VALUE = 0;
+
 
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin

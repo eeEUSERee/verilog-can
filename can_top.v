@@ -51,7 +51,11 @@
  * without an explicit bus adapter.
  */
 
-module can_controller(
+module can_controller
+	#(
+	parameter Tp = 1
+	)
+	(
 	input wire rst_i,
 	input wire cs_i,
 	input wire we_i,
@@ -74,7 +78,6 @@ module can_controller(
 	`endif
 	);
 
-	parameter Tp = 1;
 
 	reg          data_out_fifo_selected;
 
@@ -532,7 +535,11 @@ endmodule
 /*
  * CAN controller connected to a wishbone bus
  */
-module can_wishbone_top(
+module can_wishbone_top
+	#(
+	parameter Tp = 1
+	)
+	(
 	input wire wb_clk_i,
 	input wire wb_rst_i,
 	input wire [7:0] wb_dat_i,
@@ -558,7 +565,6 @@ module can_wishbone_top(
 	`endif
 	);
 
-	parameter Tp = 1;
 
 	reg          cs_sync1 = 0;
 	reg          cs_sync2 = 0;
@@ -627,7 +633,11 @@ endmodule
  * CAN controller connected to an 8051 bus.
  * Output enable signal is provided for data bus output signals.
  */
-module can_8051_top(
+module can_8051_top
+	#(
+	parameter Tp = 1
+	)
+	(
 	input wire rst_i,
 	input wire cs_can_i,
 	input wire ale_i,
@@ -651,8 +661,6 @@ module can_8051_top(
 	input wire [`CAN_MBIST_CTRL_WIDTH - 1:0] mbist_ctrl_i // bist chain shift control
 	`endif
 	);
-
-	parameter Tp = 1;
 
 	reg    [7:0] addr_latched;
 	reg          wr_i_q;
@@ -709,7 +717,11 @@ endmodule
  * This is the original 8051 interface provided by earlier versions of this
  * core.
  */
-module can_8051_tristate_top(
+module can_8051_tristate_top
+	#(
+	parameter Tp = 1
+	)
+	(
 	input wire rst_i,
 	input wire ale_i,
 	input wire rd_i,
@@ -732,7 +744,6 @@ module can_8051_tristate_top(
 	`endif
 	);
 
-	parameter Tp = 1;
 
 	wire [7:0] port_0_o;
 	wire port_0_oe;

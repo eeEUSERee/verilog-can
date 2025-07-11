@@ -41,13 +41,16 @@
 
 `default_nettype none
 
-module can_register(
+module can_register 
+	#(
+	parameter WIDTH = 8
+	)
+	(
 	input wire [WIDTH-1:0] data_in,
 	output reg [WIDTH-1:0] data_out,
 	input wire we,
-	input wire clk);
-
-	parameter WIDTH = 8;
+	input wire clk
+	);
 
 	always @(posedge clk) begin
 		if(we) begin

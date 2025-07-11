@@ -46,7 +46,11 @@
 `include "can_register_asyn.v"
 `include "can_register.v"
 
-module can_registers(
+module can_registers
+	#(
+	parameter Tp = 1
+	)
+	(
 	input wire clk,
 	input wire rst,
 	input wire cs,
@@ -157,8 +161,6 @@ module can_registers(
 	output wire [7:0] tx_data_12
 	/* End: Tx data registers */
 	);
-
-	parameter Tp = 1;
 
 	reg           tx_successful_q;
 	reg           overrun_q;

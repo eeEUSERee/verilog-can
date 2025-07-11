@@ -63,10 +63,14 @@
 `define CAN_TIMING1_SAM                 1'h0    /* Triple sampling */
 
 
-module old_can_top_tb();
+module old_can_top_tb
+	#(
+	parameter Tp = 1,
+	parameter BRP = 2*(`CAN_TIMING0_BRP + 1)
+	)
+	(
 
-	parameter Tp = 1;
-	parameter BRP = 2*(`CAN_TIMING0_BRP + 1);
+	);
 
 	initial begin
 		$dumpfile("can_top_tb.vcd");

@@ -95,40 +95,40 @@ module test_acceptance_filter(output reg finished, output reg [15:0] errors);
 	task automatic receiption_ok(input integer dut_receiver);
 		begin
 			if(irqline(dut_receiver) != 0) begin
-				errors += 1;
-				$error("DUT%d did not trigger interrupt line", dut_receiver);
+				errors = errors + 1;
+				$warning("DUT%d did not trigger interrupt line", dut_receiver);
 			end
 
 			get_interrupt_register(dut_receiver, value);
 			if(dut_receiver == 2) begin
-				expect = 8'he1; // basic mode controller has always 0xe0 set.
+				expected= 8'he1; // basic mode controller has always 0xe0 set.
 			end else begin
-				expect = 8'h01;
+				expected= 8'h01;
 			end
-			if(value != expect) begin
-				errors += 1;
-				$error("DUT%d interrupt should be 'RX complete' (0x%02X) but is 0x%02X",
-					dut_receiver, expect, value);
+			if(value != expected) begin
+				errors = errors + 1;
+				$warning("DUT%d interrupt should be 'RX complete' (0x%02X) but is 0x%02X",
+					dut_receiver, expected, value);
 			end
 
 			value = get_rx_fifo_framecount(dut_receiver);
-			expect = 1;
-			if(value == expect) begin
+			expected= 1;
+			if(value == expected) begin
 				release_receive_buffer(dut_receiver);
 			end else begin
-				errors += 1;
-				$error("DUT%d has %d frames in fifo, but there should be %d.",
-					dut_receiver, value, expect);
+				errors = errors + 1;
+				$warning("DUT%d has %d frames in fifo, but there should be %d.",
+					dut_receiver, value, expected);
 			end
 
 			repeat (5) @(posedge clk);
 
-			expect = 0;
+			expected= 0;
 			value = get_rx_fifo_framecount(dut_receiver);
 			if(value != 0) begin
-				errors += 1;
-				$error("DUT%d did not properly release buffer. Has %d in queue, should be %d",
-					dut_receiver, value, expect);
+				errors = errors + 1;
+				$warning("DUT%d did not properly release buffer. Has %d in queue, should be %d",
+					dut_receiver, value, expected);
 			end
 		end
 	endtask
@@ -146,7 +146,7 @@ module test_acceptance_filter(output reg finished, output reg [15:0] errors);
 	integer dut_sender = 1;
 	integer dut_receiver;
 	integer value = 0;
-	integer expect = 0;
+	integer expected= 0;
 
 	reg [31:0] filter_id;
 	reg [31:0] bad_id;

@@ -41,15 +41,16 @@
 
 `default_nettype none
 
-module can_register_syn(
+module can_register_syn #(
+	parameter WIDTH = 8,
+	parameter RESET_VALUE = 0
+	)
+	(
 	input wire [WIDTH-1:0] data_in,
 	output reg [WIDTH-1:0] data_out,
 	input wire we,
 	input wire clk,
 	input wire rst_sync);
-
-	parameter WIDTH = 8;
-	parameter RESET_VALUE = 0;
 
 	always @(posedge clk)
 	begin

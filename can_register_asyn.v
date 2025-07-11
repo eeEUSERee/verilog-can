@@ -41,15 +41,17 @@
 
 `default_nettype none
 
-module can_register_asyn(
+module can_register_asyn
+	#(
+	parameter WIDTH = 8,
+	parameter RESET_VALUE = 0
+	)
+	(
 	input wire [WIDTH-1:0] data_in,
 	output reg [WIDTH-1:0] data_out,
 	input wire we,
 	input wire clk,
 	input wire rst);
-
-	parameter WIDTH = 8;
-	parameter RESET_VALUE = 0;
 
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin

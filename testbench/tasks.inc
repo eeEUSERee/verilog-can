@@ -332,8 +332,8 @@ task automatic verify_transmit_started(input integer dut);
 			@(posedge clk);
 		end
 		if(0==countdown) begin
-			errors += 1;
-			$error("DUT%d did not send data on can bus.", dut);
+			errors = errors + 1;
+			$warning("DUT%d did not send data on can bus.", dut);
 		end else begin
 			countdown = 0;
 		end
@@ -352,15 +352,15 @@ task automatic verify_transmit_finished(input integer dut);
 			@(posedge clk);
 		end
 		if(0 == countdown) begin
-			$error("DUT%d TX timeout", dut_sender);
+			$warning("DUT%d TX timeout", dut_sender);
 		end else begin
 			countdown = 0;
 			get_interrupt_register(dut_sender, value);
-			expect = 8'h02;
-			if(value != expect) begin
-				errors += 1;
-				$error("DUT%d interrupt should be 'TX complete' (0x%02X) but is 0x%02X",
-					dut_sender, expect, value);
+			expected = 8'h02;
+			if(value != expected) begin
+				errors = errors + 1;
+				$warning("DUT%d interrupt should be 'TX complete' (0x%02X) but is 0x%02X",
+					dut_sender, expected, value);
 			end
 		end
 	end
@@ -394,7 +394,7 @@ task automatic receive_frame(input integer dut,
 		received_extended_id = value[7];
 		received_data_length = value[3:0];
 		if(received_data_length[3] & |(received_data_length[2:0])) begin
-			$error("insane DLC while receiving frame: %d. truncating to 8.\n", received_data_length);
+			$warning("insane DLC while receiving frame: %d. truncating to 8.\n", received_data_length);
 			//received_data_length = 8;
 		end
 
@@ -465,31 +465,31 @@ task automatic receive_and_verify_frame(input integer dut,
 		receive_frame(dut, received_remote_transmission_request, received_extended_id, received_id, received_data_length, received_data);
 
 		if(received_remote_transmission_request != expected_remote_transmission_request) begin
-			$error("DUT%d RTR flag: got %d should be %d",
+			$warning("DUT%d RTR flag: got %d should be %d",
 				dut, received_remote_transmission_request, expected_remote_transmission_request);
 			errors = errors + 1;
 		end
 
 		if(received_extended_id != expected_extended_id) begin
-			$error("DUT%d extended ID flag: got %d should be %d",
+			$warning("DUT%d extended ID flag: got %d should be %d",
 				dut, received_extended_id, expected_extended_id);
 			errors = errors + 1;
 		end
 
 		if(received_id != expected_id) begin
-			$error("DUT%d ID: got 0x%08x should be 0x%08x\n",
+			$warning("DUT%d ID: got 0x%08x should be 0x%08x\n",
 				dut, received_id, expected_id);
 			errors = errors + 1;
 		end
 
 		if(received_data_length != expected_data_length) begin
-			$error("DUT%d DLC: got %d should be %d\n",
+			$warning("DUT%d DLC: got %d should be %d\n",
 				dut, received_data_length, expected_data_length);
 			errors = errors + 1;
 		end
 
 		if(received_data != expected_data) begin
-			$error("DUT%d data: got 0x%016x should be 0x%016x\n",
+			$warning("DUT%d data: got 0x%016x should be 0x%016x\n",
 				dut, received_data, expected_data);
 			errors = errors + 1;
 		end

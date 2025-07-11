@@ -41,14 +41,17 @@
 
 `default_nettype none
 
-module can_crc(
+module can_crc
+	#(
+	parameter Tp = 1
+	)
+	(
 	input wire clk,
 	input wire data,
 	input wire enable,
 	input wire initialize,
 	output reg [14:0] crc);
 
-	parameter Tp = 1;
 
 	wire crc_next = data ^ crc[14];
 	wire [14:0] crc_tmp = {crc[13:0], 1'b0};

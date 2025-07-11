@@ -43,7 +43,11 @@
 
 `include "can_top_defines.v"
 
-module can_btl( 
+module can_btl
+	#(
+	parameter Tp = 1
+	)
+	(	 
 	input wire clk,
 	input wire rst,
 	input wire rx,
@@ -78,8 +82,6 @@ module can_btl(
 	input wire go_tx,
 	input wire send_ack,
 	input wire node_error_passive);
-
-	parameter Tp = 1;
 
 	reg     [6:0] clk_cnt;
 	reg           clk_en;

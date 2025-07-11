@@ -36,7 +36,14 @@
 
 `default_nettype none
 
-module simulated_can_bus(input wire [N-1:0] tx, output wire [N-1:0] rx);
+module simulated_can_bus
+	#(
+	parameter N=2, // number of devices on bus
+	parameter delay=0 // delay from any one to another node
+	)
+	(
+	input wire [N-1:0] tx, 
+	output wire [N-1:0] rx);
 	/*
 	 * tx bit '1' equals to 0V = can_hi - can_low (recessive)
 	 * tx bit '0' equals to 5V = can_hi - can_low (dominant)
@@ -46,8 +53,7 @@ module simulated_can_bus(input wire [N-1:0] tx, output wire [N-1:0] rx);
 	 * other device.
 	 */
 
-	parameter N=2; // number of devices on bus
-	parameter delay=0; // delay from any one to another node
+	
 
 	wire [N-1:0] delayed_tx;
 	wand [N-1:0] merged_tx;

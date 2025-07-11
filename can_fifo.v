@@ -43,7 +43,11 @@
 
 `include "can_top_defines.v"
 
-module can_fifo(
+module can_fifo
+	#(
+	parameter Tp = 1
+	)
+	(
 	input wire clk,
 	input wire rst,
 	input wire wr,
@@ -67,7 +71,6 @@ module can_fifo(
 	`endif
 	);
 
-	parameter Tp = 1;
 
 	`ifdef CAN_BIST
 	wire          mbist_s_0;

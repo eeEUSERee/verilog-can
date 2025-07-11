@@ -61,7 +61,7 @@ module test_tx_rx(output reg finished, output reg [15:0] errors);
 	integer dut_receiver = 0;
 
 	integer value = 0;
-	integer expect = 0;
+	integer expected = 0;
 
 	reg [28:0] tx_id;
 	reg [3:0] tx_data_length;
@@ -86,8 +86,8 @@ module test_tx_rx(output reg finished, output reg [15:0] errors);
 		for(dut_sender=1; dut_sender<=5; dut_sender=dut_sender+1) begin
 			// make sure bus is idle
 			if(1!=canbus_tap_rx) begin
-				errors += 1;
-				$error("CAN bus should be idle but is not.");
+				errors = errors + 1;
+				$warning("CAN bus should be idle but is not.");
 			end
 
 			// transmit frame from one device
@@ -102,22 +102,22 @@ module test_tx_rx(output reg finished, output reg [15:0] errors);
 			for(dut_receiver=1; dut_receiver<=5; dut_receiver=dut_receiver+1) begin
 				if(dut_receiver != dut_sender) begin
 					get_interrupt_register(dut_receiver, value);
-					expect = 8'h01;
-					if(value != expect) begin
-						errors += 1;
-						$error("DUT%d interrupt should be 'RX complete' (0x%02X) but is 0x%02X",
-							dut_receiver, expect, value);
+					expected = 8'h01;
+					if(value != expected) begin
+						errors = errors + 1;
+						$warning("DUT%d interrupt should be 'RX complete' (0x%02X) but is 0x%02X",
+							dut_receiver, expected, value);
 					end
 
 					value = get_rx_fifo_framecount(dut_receiver);
-					expect = 1;
-					if(value == expect) begin
+					expected = 1;
+					if(value == expected) begin
 						receive_and_verify_frame(dut_receiver, remote_transmission_request, extended_mode, tx_id, tx_data_length, tx_data, rx_errors);
 						errors = errors + rx_errors;
 					end else begin
-						errors += 1;
-						$error("DUT%d has %d frames in fifo, but there should be %d.",
-							dut_receiver, value, expect);
+						errors = errors + 1;
+						$warning("DUT%d has %d frames in fifo, but there should be %d.",
+							dut_receiver, value, expected);
 					end
 				end
 			end
@@ -125,11 +125,11 @@ module test_tx_rx(output reg finished, output reg [15:0] errors);
 			// check that interrupts have not reappeared.
 			for(i = 1; i <= 5; i=i+1) begin
 				get_interrupt_register(i, value);
-				expect = 8'h0;
-				if(value != expect) begin
-					errors += 1;
-					$error("DUT%d interrupt should be 'NONE' (0x%02X) but is 0x%02X",
-						i, expect, value);
+				expected = 8'h0;
+				if(value != expected) begin
+					errors = errors + 1;
+					$warning("DUT%d interrupt should be 'NONE' (0x%02X) but is 0x%02X",
+						i, expected, value);
 				end
 			end
 			repeat (20) @(posedge clk);

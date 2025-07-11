@@ -45,8 +45,8 @@
 module can_top_tb();
 
 	initial begin
-		$dumpfile("can_top_tb.vcd");
-		$dumpvars;
+		$dumpfile("can_trace.vcd"); // for GTKWave or similar viewer
+		$dumpvars(0, can_top_tb);
 	end
 
 	localparam TESTCOUNT=2;
@@ -99,7 +99,7 @@ module can_top_tb();
 		$display("%1d subtests completed.", TESTCOUNT);
 
 		if(errors) begin
-			$error("FAIL: collected %d errors", errors);
+			$warning("FAIL: collected %d errors", errors);
 			$fatal();
 		end else begin
 			$display("PASS: testsuite finished successfully");

@@ -43,7 +43,11 @@
 
 `include "can_top_defines.v"
 
-module can_acf(
+module can_acf 
+	#(
+	parameter Tp = 1
+	)
+	(
 	input wire clk,
 	input wire rst,
 	input wire [28:0] id,
@@ -76,8 +80,6 @@ module can_acf(
 
 	output reg id_ok
 	);
-
-	parameter Tp = 1;
 
 
 	wire          match;
